@@ -10,13 +10,13 @@ class JiraXrayRobot:
 
     def get_jira_cred(self, path):
         config = configparser.ConfigParser()
-        config.read(path + '/JiraUserCredentials.config')
+        config.read(path)
         self.jira_server = config['JIRA_CREDENTIALS']['server']
         self.jira_username = config['JIRA_CREDENTIALS']['username']
         self.jira_password = config['JIRA_CREDENTIALS']['password']
 
     def get_test_cases_list(self, testcase_path):
-        readTestCase = open(testcase_path + '/TestCaseLists.txt')
+        readTestCase = open(testcase_path)
         return (str(readTestCase.read()).strip())
 
     def CreateTestPlan(self, cred_path, project_key, testplan_summary='', testplan_description=''):
