@@ -31,6 +31,7 @@ DeleteTestCaseFromTestPlan   <Config File Credentials as shown above>  <TEst Pla
 GetTestExecutionAssociatedWithTestPlan  <Config File Credentials as shown above>    <TEst Plan Id>
 AssociateTestExecutionWithTestPLan  <Config File Credentials as shown above>    <TEst Plan Id>  <TestExecutionId><TestExecutionId>
 DeleteTestExecutionFromTestPLan  <Config File Credentials as shown above>    <TEst Plan Id>  <TestExecutionId><TestExecutionId>
+ImportSingleTestResult  <Config File Credentials as shown above> <testExecutionKey> <testCaseKey> <status> <releaseNumber optional> <comment optional>
 
 
 
