@@ -25,6 +25,12 @@ Add Test Case
 Sample TEst Case list below
 
 <TestCaseKey>,<TestCaseKey>
+  
+GetTestCasesAssociatedToTestPlan  <Config File Credentials as shown above>    <TEst Plan Id>
+DeleteTestCaseFromTestPlan   <Config File Credentials as shown above>  <TEst Plan Id>  <TestCaseId><TestCaseId>
+GetTestExecutionAssociatedWithTestPlan  <Config File Credentials as shown above>    <TEst Plan Id>
+AssociateTestExecutionWithTestPLan  <Config File Credentials as shown above>    <TEst Plan Id>  <TestExecutionId><TestExecutionId>
+DeleteTestExecutionFromTestPLan  <Config File Credentials as shown above>    <TEst Plan Id>  <TestExecutionId><TestExecutionId>
 
 
 
