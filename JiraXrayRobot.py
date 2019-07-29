@@ -1,4 +1,5 @@
 import configparser
+import datetime
 import requests
 
 class JiraXrayRobot:
@@ -127,3 +128,19 @@ class JiraXrayRobot:
                                  files=files, auth=(self.jira_username, self.jira_password))
         responseJson = response.json()
         return (responseJson['testExecIssue']['key'])
+
+    def ImportSingleTestResult(self, cred_path, testExecutionId, testCaseId, status, releaseNumber='', comment=''):
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        testCaseString = ''
+        start_Date = str(datetime.datetime.now().isoformat()).split('.')[0] + '+01:00'
+        end_Date = str(datetime.datetime.now().isoformat()).split('.')[0] + '+01:00'
+        run_date = str(datetime.datetime.now().isoformat()).split('.')[0] + '+01:00'
+        headers = {'Content-Type': 'application/json'}
+        infoSection = '"info" : {"summary" : "Updated Test Results for Release' + releaseNumber + '","description" : "Updated From Automation", "user" : "' + self.jira_username + '","startDate" : "' + start_Date + '","finishDate" : "' + end_Date + '"}'
+        testCaseString = testCaseString + '{'
+        testCaseString = testCaseString + '"start" : "'+run_date+'",'+'"finish" : "'+run_date+'",'+'"testKey" : "'+testCaseId+'", "status" :"'+status+'", "comment" : "'+comment+'"},'
+        testCaseDetails = '[' + testCaseString[:-1] + ']'
+        completeRequest = '{"testExecutionKey" : "' + testExecutionId + '",' + infoSection + ',"tests" : ' + testCaseDetails + '}'
+        response = requests.post(self.jira_server+"/rest/raven/1.0/import/execution", headers=headers,
+                                 data=completeRequest, auth=(self.jira_username, self.jira_password), verify=False)
+        return(response.text)
