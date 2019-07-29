@@ -44,7 +44,7 @@ class JiraXrayRobot:
         return (responseJson['key'])
 
     def AddTestsToTestPlan(self, testcase_path, cred_path, testPlanId):
-        # Add Test Cases to Test Plan
+        # Add Test Cases to Test Plan provide test Case list path, credential config and testPlanKey
         JiraXrayRobot.get_jira_cred(self, cred_path)
         testCaseIds = JiraXrayRobot.get_test_cases_list(self, testcase_path)
         testCaseList = ""
@@ -62,7 +62,57 @@ class JiraXrayRobot:
                                  verify=False)
         return (response.text)
 
+    def GetTestCasesAssociatedToTestPlan(self, cred_path, testPlanId):
+        # Get List of Test Cases attached to a test plan, provide credentials config and testPlanKey
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        headers = {'Content-Type': 'application/json'}
+        rsp=requests.get(self.jira_server + "/rest/raven/1.0/api/testplan/"+testPlanId+"/test",headers=headers, auth=(self.jira_username, self.jira_password), verify=False)
+        return(rsp.json())
+
+    def DeleteTestCaseFromTestPlan(self, cred_path, testPlanId, *testCaseIds):
+        # Delete Test Cases attached to a test plan, provide credentials config and testPlanKey and TestKeys to be deleted
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        headers = {'Content-Type': 'application/json'}
+        for testCaseId in testCaseIds:
+            rsp = requests.delete(self.jira_server + "/rest/raven/1.0/api/testplan/"+testPlanId+"/test/"+testCaseId, headers=headers, auth=(self.jira_username, self.jira_password), verify=False)
+            if (rsp.status_code == 200):
+                print("Successfully Deleted "+ testCaseId)
+
+    def GetTestExecutionAssociatedWithTestPlan(self, cred_path, testPlanId):
+        # Get List of Test Execution attached to a test plan, provide credentials config and testPlanKey
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        headers = {'Content-Type': 'application/json'}
+        response = requests.get(self.jira_server + "/rest/raven/1.0/api/testplan/"+testPlanId+"/testexecution",headers=headers, auth=(self.jira_username, self.jira_password), verify=False)
+        return(response.json())
+
+    def AssociateTestExecutionWithTestPLan(self, cred_path, testPlanId, *testExecutionIds):
+        # Attach  Test Executions to a test plan, provide credentials config and testPlanKey and TestExecutionKeys
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        testExecutionLists = ""
+        for testExecutionId in testExecutionIds:
+            testExecutionLists = testExecutionLists + '"' + testExecutionId + '"' + ","
+        addExecutions = '''
+        {
+            "add": [''' + testExecutionLists[:-1] + ''']
+        }'''
+        headers = {'Content-Type': 'application/json'}
+        response = requests.post(self.jira_server + "/rest/raven/1.0/api/testplan/" + testPlanId + "/testexecution",
+                                 headers=headers, data=addExecutions, auth=(self.jira_username, self.jira_password), verify=False)
+        return (response.text)
+
+    def DeleteTestExecutionFromTestPLan(self, cred_path, testPlanId, *testExecutionIds):
+        # Delete Test Execution from a test plan, provide credentials config and testPlanKey and testExecutionKeys
+        JiraXrayRobot.get_jira_cred(self, cred_path)
+        headers = {'Content-Type': 'application/json'}
+        for testExecutionId in testExecutionIds:
+            rsp = requests.delete(self.jira_server + "/rest/raven/1.0/api/testplan/"+testPlanId+"/testexecution/"+testExecutionId, headers=headers, auth=(self.jira_username, self.jira_password), verify=False)
+            if (rsp.status_code == 200):
+                print("Successfully Deleted "+ testExecutionId)
+
+
+
     def UploadRobotFrameworkReportToJira(self, cred_path, project_key, testplan_key, resultxml):
+        # Upload Robot Execution Report to a test Plan , provide credentials config, ProjectKey, testPlanKey, and full path of output.xml
         JiraXrayRobot.get_jira_cred(self, cred_path)
         params = (
             ("projectKey", project_key),
