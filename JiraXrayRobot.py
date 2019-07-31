@@ -44,7 +44,7 @@ class JiraXrayRobot:
         responseJson = response.json()
         return (responseJson['key'])
 
-    def AddTestsToTestPlan(self, testcase_path, cred_path, testPlanId):
+    def AddTestsToTestPlan(self, cred_path, testcase_path, testPlanId):
         # Add Test Cases to Test Plan provide test Case list path, credential config and testPlanKey
         JiraXrayRobot.get_jira_cred(self, cred_path)
         testCaseIds = JiraXrayRobot.get_test_cases_list(self, testcase_path)
