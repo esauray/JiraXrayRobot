@@ -20,7 +20,7 @@ username = XXXXX
 password = XXXXX
   
 Add Test Case
-    AddTestsToTestPlan    <List Of Test Caes file>      <Config File Credentials as shown above>    <TEst Plan Id>
+    AddTestsToTestPlan    <Config File Credentials as shown above>     <List Of Test Caes file>          <TEst Plan Id>
   
 Sample TEst Case list below
 
